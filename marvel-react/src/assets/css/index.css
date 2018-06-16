@@ -1,0 +1,25 @@
+body {
+    font: 14px "Century Gothic", Futura, sans-serif;
+    margin: 20px;
+}
+
+.container-hero{
+    margin-bottom: 30px;
+}
+
+.container-hero-name{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.portrait-hero{
+    width: 120px;
+    height: 120px;
+    cursor: pointer;
+}
+
+.portrait-hero-display {
+    width: 60%;
+    height: 80%;
+}
