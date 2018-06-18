@@ -21,6 +21,7 @@ class Application extends React.Component {
 
             //lista de herois da busca
             characterList : [],
+            totalItems: null,
 
             //heroi selecionado para detalhes
             displayedCharacter: null,
@@ -37,6 +38,7 @@ class Application extends React.Component {
 
         //eventos da busca
         this.handleChange = this.handleChange.bind(this);
+        this.searchByName = this.searchByName.bind(this);
     }
 
     /*
@@ -47,11 +49,12 @@ class Application extends React.Component {
         var _self = this;
 
         //turn on load
-        this.API.getCharacterList(this.state.pagination, _name, function _callbackGetCharacterList (resp) {
+        this.API.getCharacterList(this.state.pagination, _name, function _callbackGetCharacterList (resp, total) {
 
             //undo load
             _self.setState({
-                characterList: resp
+                characterList: resp,
+                totalItems: total
             });
         })
 
@@ -70,7 +73,7 @@ class Application extends React.Component {
     /*
     *@description Atualiza input digitado de busca
      */
-    searchByName() {
+    searchByName(e) {
 
         //zera paginaçao
         this.setState({
@@ -79,6 +82,8 @@ class Application extends React.Component {
                 currentPage: 0,
             },
         }, () => {this.getCharacterList(this.state.searchField)});
+
+        e.preventDefault();
     }
 
     /*
@@ -113,8 +118,6 @@ class Application extends React.Component {
             _self.setState({
                 displayedCharacter: resp
             });
-
-            console.log(resp)
         })
 
     }
@@ -135,58 +138,38 @@ class Application extends React.Component {
 
         return (
             <main role="main">
-            <div className="jumbotron">
+            <div className="jumbotron jumbotron-header">
                 <div className="container">
-                    <h1 className="display-3">Discover Marvel</h1>
+                    <h1 className="display-3 jumbotron-title">Discover Marvel</h1>
                     <p>Conheça mais sobre os seus herois favoritos.</p>
-                    <div className="input-group mb-3">
-                        <input type="text"
-                               className="form-control"
-                               placeholder="Pesquise pelo nome do herói (em ingles)"
-                               value={this.state.searchField}
-                               onChange={this.handleChange} />
+                    <form onSubmit={this.searchByName}>
+                        <div className="input-group mb-3">
+                            <input type="text"
+                                   className="form-control"
+                                   placeholder="Pesquise pelo nome do herói (em ingles)"
+                                   value={this.state.searchField}
+                                   onChange={this.handleChange} />
                             <div className="input-group-append">
-                                <button className="btn btn-outline-secondary"
+                                <button className="btn btn-outline-secondary jumbotron-btn"
                                         type="button"
-                                        onClick={id => this.searchByName()}>Pesquisar</button>
+                                        onClick={(e) => this.searchByName(e)}>Pesquisar</button>
                             </div>
-                    </div>
+                        </div>
+                    </form>
                 </div>
             </div>
             <div className="container">
                 <div className="row">
-                    <div className="col-md-6">
+                    <div className="col-md-6 container-list-hero">
                         <CharacterShowcase
                             characterList={this.state.characterList}
                             onClick={id => this.getCharacterData(id)}
+                            paginate={dir => this.paginate(dir)}
+                            totalItems={this.state.totalItems}
                         />
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-md-6 container-details">
                         {displayHero}
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-md-6">
-                        <nav>
-                            <ul className="pagination justify-content-center">
-                                <li className="page-item">
-                                    <a className="page-link"
-                                       aria-label="Anterior"
-                                       onClick={(i) => this.paginate('previous')}>
-                                        <span aria-hidden="true">&laquo;</span>
-                                        <span className="sr-only">Anterior</span>
-                                    </a>
-                                </li>
-                                <li className="page-item">
-                                    <a className="page-link"
-                                       aria-label="Próximo"
-                                       onClick={(i) => this.paginate('next')}>
-                                        <span aria-hidden="true">&raquo;</span>
-                                        <span className="sr-only">Próximo</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
                     </div>
                 </div>
             <hr/>

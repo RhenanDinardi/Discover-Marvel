@@ -1,5 +1,6 @@
 import React from 'react';
 import Character from './Character.js';
+import Pagination from './Pagination.js';
 
 class CharacterShowcase extends React.Component {
 
@@ -22,9 +23,23 @@ class CharacterShowcase extends React.Component {
                 );
         });
 
+        if(pageList.length === 0){
+            pageList.push(
+                <div className="col-md-12" key={999}>
+                    <p>Nenhum resultado encontrado</p>
+                </div>
+            )
+        }
+
         return (
             <div className="row">
                 { pageList}
+                <div className="col-md-12">
+                    <Pagination
+                        totalItems={ this.props.totalItems}
+                        onClick={(dir) => this.props.paginate(dir)}
+                    />
+                </div>
             </div>
         );
     }

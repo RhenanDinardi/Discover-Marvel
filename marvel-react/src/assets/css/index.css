@@ -3,6 +3,34 @@ body {
     margin: 20px;
 }
 
+main {
+    background-color: #000000e3;
+}
+
+.jumbotron-header{
+    background-color: #d40d0d !important;
+    border: 5px solid white;
+    color: white;
+}
+
+.jumbotron-title{
+    font-weight: 600 !important;
+}
+
+.jumbotron-btn {
+    background-color: white !important;
+}
+
+.container-list-hero {
+    background-color: white;
+    padding-top: 15px;
+}
+
+.container-details {
+    background-color: #cecece;
+    padding-top: 15px;
+}
+
 .container-hero{
     margin-bottom: 30px;
 }
@@ -22,4 +50,8 @@ body {
 .portrait-hero-display {
     width: 60%;
     height: 80%;
+}
+
+.btn-link {
+    margin-right: 10px;
 }

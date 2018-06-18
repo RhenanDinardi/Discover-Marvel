@@ -45,9 +45,9 @@ class marvelAPI {
 
         //console.log(params);
         axios
-            .get("http://gateway.marvel.com/v1/public/characters", params)
+            .get("https://gateway.marvel.com/v1/public/characters", params)
             .then(response => {
-                _callback && _callback(response.data.data.results);
+                _callback && _callback(response.data.data.results, response.data.data.total);
             })
             .catch(error => {
                 console.log(error)
@@ -69,9 +69,9 @@ class marvelAPI {
 
         //console.log(params);
         axios
-            .get("http://gateway.marvel.com/v1/public/characters/" + _id, params)
+            .get("https://gateway.marvel.com/v1/public/characters/" + _id, params)
             .then(response => {
-                console.log(response.data.data.results[0]);
+                //console.log(response.data.data.results[0]);
 
                 _callback && _callback(response.data.data.results[0]);
             })
