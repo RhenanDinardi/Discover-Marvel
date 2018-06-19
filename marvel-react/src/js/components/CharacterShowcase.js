@@ -1,6 +1,6 @@
 import React from 'react';
 import Character from './Character.js';
-import Pagination from './Pagination.js';
+import Pagination from '../elements/Pagination.js';
 
 class CharacterShowcase extends React.Component {
 
@@ -37,6 +37,7 @@ class CharacterShowcase extends React.Component {
                 <div className="col-md-12">
                     <Pagination
                         totalItems={ this.props.totalItems}
+                        pagination={this.props.pagination}
                         onClick={(dir) => this.props.paginate(dir)}
                     />
                 </div>

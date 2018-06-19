@@ -7,6 +7,27 @@ main {
     background-color: #000000e3;
 }
 
+.custom-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 3000;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    background: rgba(11, 14, 14, 0.5);
+}
+
+.center-loader {
+    position: relative; top: 45%;
+}
+
+.svg-loader {
+    width: 100px;
+    height: 100px;
+    background: none;
+}
+
 .jumbotron-header{
     background-color: #d40d0d !important;
     border: 5px solid white;

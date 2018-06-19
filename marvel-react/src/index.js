@@ -3,8 +3,10 @@ import ReactDOM from 'react-dom';
 import './assets/css/index.css';
 import './assets/css/bootstrap.min.css';
 
-import marvelAPI from './js/marvelAPI.js';
-import CharacterShowcase from './js/CharacterShowcase';
+import marvelAPI from './js/api/marvelAPI.js';
+import CharacterShowcase from './js/components/CharacterShowcase';
+import Loader from './js/elements/Loader';
+
 import DetailPage from './js/DetailPage';
 
 class Application extends React.Component {
@@ -15,8 +17,9 @@ class Application extends React.Component {
 
             //paginação dos herois da busca
             pagination :{
-            itemsPerPage: 9,
-            currentPage: 0,
+                itemsPerPage: 9,
+                currentPage: 0,
+                numPages: 5
             },
 
             //lista de herois da busca
@@ -27,7 +30,10 @@ class Application extends React.Component {
             displayedCharacter: null,
 
             //campo de busca
-            searchField: ''
+            searchField: '',
+
+            //controle do carregando da tela
+            showLoader: true
         };
 
         //inicializando API
@@ -48,13 +54,12 @@ class Application extends React.Component {
 
         var _self = this;
 
-        //turn on load
         this.API.getCharacterList(this.state.pagination, _name, function _callbackGetCharacterList (resp, total) {
 
-            //undo load
             _self.setState({
                 characterList: resp,
-                totalItems: total
+                totalItems: total,
+                showLoader: false
             });
         })
 
@@ -80,7 +85,10 @@ class Application extends React.Component {
             pagination :{
                 itemsPerPage: 9,
                 currentPage: 0,
+                numPages: 5
             },
+            displayedCharacter: null,
+            showLoader: true
         }, () => {this.getCharacterList(this.state.searchField)});
 
         e.preventDefault();
@@ -91,16 +99,26 @@ class Application extends React.Component {
      */
     paginate(_dir) {
 
-        if(_dir === 'previous' && this.state.pagination.currentPage === 0) return;
+        var newDir;
+        if (_dir === 'previous' ) {
 
-        var newDir = (_dir === 'previous' ) ?  this.state.pagination.currentPage - 1 : this.state.pagination.currentPage + 1;
+            newDir = this.state.pagination.currentPage - 1
+        }
+        else if (_dir === 'next') {
+            newDir = this.state.pagination.currentPage + 1;
+        }
+        else {
 
+            newDir = _dir.i;
+        }
         this.setState({
             pagination: {
                 currentPage: newDir,
                 itemsPerPage: this.state.pagination.itemsPerPage,
-            }
-        },() => {this.getCharacterList()} );
+                numPages: 5
+            },
+            showLoader: true
+        },() => {this.getCharacterList(this.state.searchField || '')} );
     }
 
 
@@ -113,13 +131,19 @@ class Application extends React.Component {
 
         var _self = this;
 
-        this.API.getCharacterData(_id, this.state.pagination, function _callbackgetCharacterData (resp) {
+        this.setState({
+            showLoader: true
+        }, () =>{
 
-            _self.setState({
-                displayedCharacter: resp
-            });
-        })
+            this.API.getCharacterData(_id, this.state.pagination, function _callbackgetCharacterData (resp) {
 
+                _self.setState({
+                    displayedCharacter: resp,
+                    showLoader: false
+                });
+            })
+
+        });
     }
 
 
@@ -136,8 +160,15 @@ class Application extends React.Component {
             )
         };
 
+        var canDisplayLoad = (this.state.showLoader);
+        var loader = null;
+
+        if(canDisplayLoad) loader = ( <Loader /> );
+
         return (
+
             <main role="main">
+                {loader}
             <div className="jumbotron jumbotron-header">
                 <div className="container">
                     <h1 className="display-3 jumbotron-title">Discover Marvel</h1>
@@ -166,6 +197,7 @@ class Application extends React.Component {
                             onClick={id => this.getCharacterData(id)}
                             paginate={dir => this.paginate(dir)}
                             totalItems={this.state.totalItems}
+                            pagination={this.state.pagination}
                         />
                     </div>
                     <div className="col-md-6 container-details">
