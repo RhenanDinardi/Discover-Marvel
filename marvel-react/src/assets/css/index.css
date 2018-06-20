@@ -76,3 +76,19 @@ main {
 .btn-link {
     margin-right: 10px;
 }
+
+.container-comic{
+    margin-bottom: 30px;
+    margin-right: 10px;
+}
+
+.portrait-comic{
+    width: 120px;
+    height: 180px;
+    cursor: pointer;
+}
+
+.comic-value{
+    margin-left: 10px;
+    float: left;
+}

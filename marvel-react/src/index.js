@@ -29,6 +29,10 @@ class Application extends React.Component {
             //heroi selecionado para detalhes
             displayedCharacter: null,
 
+            //lista de comics do heroi selecionado
+            listComics: null,
+            selectedComic: null,
+
             //campo de busca
             searchField: '',
 
@@ -141,8 +145,44 @@ class Application extends React.Component {
                     displayedCharacter: resp,
                     showLoader: false
                 });
+
+                //carrega lista de comics daquele heroi
+                _self.getCharacterComicData(_id);
             })
 
+        });
+    }
+
+    /*
+    *@description Busca algumas comics do heroi selecionado
+     */
+    getCharacterComicData(_id) {
+
+        var _self = this;
+
+        this.setState({
+            listComics: null,
+            selectedComic: null
+        }, () =>{
+
+            this.API.getCharacterComicData(_id, function _callbackgetCharacterComicData (resp) {
+
+                _self.setState({
+                    listComics: resp
+                });
+
+            })
+
+        });
+    }
+
+    /*
+    *@description Seta comic selecionada
+     */
+    setSelectedComic (_comic) {
+
+        this.setState({
+            selectedComic: _comic
         });
     }
 
@@ -156,6 +196,9 @@ class Application extends React.Component {
             displayHero = (
                 <DetailPage
                     selected={this.state.displayedCharacter}
+                    listComics={this.state.listComics}
+                    selectedComic={this.state.selectedComic}
+                    onClick={comic => this.setSelectedComic(comic)}
                 />
             )
         };

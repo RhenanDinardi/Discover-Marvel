@@ -81,6 +81,31 @@ class marvelAPI {
             });
     }
 
+    /*
+    *@description Busca de 20 comics daquele heroi
+     */
+    getCharacterComicData = function (_id, _callback) {
+
+        var params = this.getBaseParams();
+
+        //seta intervalo de paginaçao
+        params.params.limit = 20;
+        params.params.offset = 0;
+
+        //console.log(params);
+        axios
+            .get("https://gateway.marvel.com/v1/public/characters/" + _id + '/comics', params)
+            .then(response => {
+                console.log(response.data.data.results);
+
+                _callback && _callback(response.data.data.results);
+            })
+            .catch(error => {
+                console.log(error)
+                _callback && _callback([]);
+            });
+    }
+
 }
 
 export default marvelAPI;

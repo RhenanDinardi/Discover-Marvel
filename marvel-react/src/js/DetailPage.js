@@ -9,17 +9,51 @@ function DetailPage (props) {
         );
     });
 
-    var comicList =  props.selected.comics.items.map((comic, index) => {
+    var comicList = [];
+    if(props.listComics) {
 
-        return (
-                <li key={index}> {comic.name }</li>
-        );
-    });
+        comicList = props.listComics.map((comic, index) => {
 
-    if (props.selected.comics.available > props.selected.comics.returned) {
+            return (
+                <div className="container-comic"key={index}>
+                    <div className="text-center">
+                        <img className="rounded portrait-comic"
+                             src={comic.thumbnail.path + '.' + comic.thumbnail.extension}
+                             onClick={() => props.onClick(comic)}
+                             alt={comic.title} />
+                    </div>
+                </div>
+            );
+        });
+
+    }
+    else{
         comicList.push(
-            <p key={21} className="card-text mb-auto">And {props.selected.comics.available - props.selected.comics.returned} more!</p>
-        )
+            <div className="col-md-12 text-center" key={'retrieving'}>
+                <p>Retrieving comic data...</p>
+            </div>
+        );
+    }
+
+    var selectedComic = null;
+    if(props.selectedComic) {
+
+        selectedComic = [];
+        selectedComic.push (
+            <div className="card-body d-flex flex-column align-items-start" key={'comicDetail'}>
+                <h3 className="mb-0">
+                    <a className="text-dark">{props.selectedComic.title}</a>
+                </h3>
+                <hr />
+                <div>
+                    <div className="mb-1 text-muted comic-value">USD ${props.selectedComic.prices[0].price}</div>
+                    <div className="mb-1 text-muted comic-value">{props.selectedComic.pageCount} pages</div>
+                </div>
+                <hr />
+                <p className="card-text mb-auto">{props.selectedComic.description || 'No description avaliable.'}</p>
+            </div>
+        );
+
     }
 
     var storyList = props.selected.stories.items.map((story, index) => {
@@ -55,8 +89,15 @@ function DetailPage (props) {
             <div className="card flex-md-row mb-4 box-shadow h-md-250">
                 <div className="card-body d-flex flex-column align-items-start">
                     <div className="mb-1 text-muted">Comics:</div>
-                    {comicList}
+                        <div className="row">
+                            {comicList}
+                        </div>
+                    <div className="row">
+                        {selectedComic}
+                    </div>
                 </div>
+            </div>
+            <div className="card flex-md-row mb-4 box-shadow h-md-250">
                 <div className="card-body d-flex flex-column align-items-start">
                     <div className="mb-1 text-muted">Stories:</div>
                     {storyList}
